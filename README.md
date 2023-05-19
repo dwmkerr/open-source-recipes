@@ -1,5 +1,25 @@
 # open-source-recipes
 
+<!-- vim-markdown-toc GFM -->
+
+- [Develop Build Pipelines using GitHub Actions](#develop-build-pipelines-using-github-actions)
+- [Allow people to test pipelines locally](#allow-people-to-test-pipelines-locally)
+    - [🚀 Build Pipelines](#-build-pipelines)
+- [Release Please](#release-please)
+- [Versioning](#versioning)
+- [Include versioning information](#include-versioning-information)
+    - [Versioning](#versioning-1)
+- [Include a link to contributing information](#include-a-link-to-contributing-information)
+    - [Contributing](#contributing)
+- [Include a link to troubleshooting information](#include-a-link-to-troubleshooting-information)
+    - [Troubleshooting](#troubleshooting)
+- [Include a link to your license](#include-a-link-to-your-license)
+    - [License](#license)
+- [Linting](#linting)
+    - [ESLint and Prettier](#eslint-and-prettier)
+
+<!-- vim-markdown-toc -->
+
 Useful snippets and patterns that can be added to your open source projects to make them more contributor friendly.
 
 ⚠️  **Heads Up** ⚠️
@@ -89,3 +109,52 @@ For common issues and help troubleshooting your configuration, see [Troubleshoot
 MIT
 
 See [LICENSE](./LICENSE)
+
+## Linting
+
+### ESLint and Prettier
+
+
+```bash
+# Install eslint and the prettier config and plugin.
+npm install --save-dev eslint eslint-config-prettier eslint-plugin-prettier
+
+# Configure eslint.
+cat << EOF > ./eslintrc.yaml
+extends: ["prettier"],
+plugins: ["prettier"],
+rules: 
+  prettier/prettier: ["error"]
+EOF
+
+# Configure the 'lint' script.
+jq '.scripts.lint="eslint ."' package.json | jq . | > package.json
+jq '.scripts.lint:fix="eslint --fix ."' package.json | jq . | > package.json
+```
+
+To use AirBnB:
+
+```bash
+npx install-peerdeps --dev eslint-config-airbnb
+
+# Add 'extends', 'plugin', set 'parser'.
+yq e '.extends += [ "airbnb" ]' .eslintrc.yaml
+```
+
+To use TypeScript:
+
+```bash
+# Install typescript parser/plugin
+npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin
+
+# Add 'extends', 'plugin', set 'parser'.
+yq e '.extends += [ "plugin:@typescript-eslint/recommended" ]' .eslintrc.yaml
+yq e '.plugins += [ "@typescript-eslint" ]' .eslintrc.yaml
+yq e '.parser = "@typescript-eslint/parser" .eslintrc.yaml
+```
+
+To add to Husky/lint-staged:
+
+```
+jq '.lint-staged."**/*.{js,ts}"="npm run lint:fix"' package.json | jq . | > package.json
+```
