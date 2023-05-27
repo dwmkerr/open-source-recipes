@@ -17,6 +17,9 @@
     - [License](#license)
 - [Linting](#linting)
     - [ESLint and Prettier](#eslint-and-prettier)
+- [Commit Linting](#commit-linting)
+    - [Setup Instructions](#setup-instructions)
+    - [Readme](#readme)
 
 <!-- vim-markdown-toc -->
 
@@ -158,3 +161,22 @@ To add to Husky/lint-staged:
 ```
 jq '.lint-staged."**/*.{js,ts}"="npm run lint:fix"' package.json | jq . | > package.json
 ```
+
+## Commit Linting
+
+### Setup Instructions
+
+[commitlint](https://github.com/conventional-changelog/commitlint) is used for commit linting.
+
+```bash
+npm install --save-dev @commitlint/{config-conventional,cli}
+npx husky add .husky/commit-msg  'npx --no -- commitlint --edit ${1}'
+echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+
+# or commitlint.config.cjs if you get Error [ERR_REQUIRE_ESM].
+```
+
+### Readme
+
+Commit messages are linted with [commitlint](https://github.com/conventional-changelog/commitlint) and should match the [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/).
+
