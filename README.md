@@ -17,6 +17,7 @@
     - [License](#license)
 - [Linting](#linting)
     - [ESLint and Prettier](#eslint-and-prettier)
+- [TypeScript](#typescript)
 - [Commit Linting](#commit-linting)
     - [Setup Instructions](#setup-instructions)
     - [Readme](#readme)
@@ -123,16 +124,24 @@ See [LICENSE](./LICENSE)
 npm install --save-dev eslint eslint-config-prettier eslint-plugin-prettier
 
 # Configure eslint.
-cat << EOF > ./eslintrc.yaml
-extends: ["prettier"],
-plugins: ["prettier"],
+cat << EOF > ./.eslintrc.yml
+extends: ["prettier"]
+plugins: ["prettier"]
 rules: 
   prettier/prettier: ["error"]
 EOF
 
 # Configure the 'lint' script.
-jq '.scripts.lint="eslint ."' package.json | jq . | > package.json
-jq '.scripts.lint:fix="eslint --fix ."' package.json | jq . | > package.json
+cp package.json package.json.backup
+jq '.scripts.lint="eslint ." | .scripts["lint:fix"]="eslint --fix ."' package.json.backup > package.json
+
+# Documents
+
+echo "| Command | Description |" >>> README.md
+echo "| ------- | ----------- |" >>> README.md
+echo "| npm run lint | Lint the code with eslint/prettier |" >>> README.md
+echo "| npm run lint:fix | Fix the code with eslint/prettier |" >>> README.md
+
 ```
 
 To use AirBnB:
@@ -141,19 +150,69 @@ To use AirBnB:
 npx install-peerdeps --dev eslint-config-airbnb
 
 # Add 'extends', 'plugin', set 'parser'.
-yq e '.extends += [ "airbnb" ]' .eslintrc.yaml
+yq e '.extends += [ "airbnb" ]' .eslintrc.yml
 ```
 
-To use TypeScript:
+## TypeScript
+
+Good reference at https://khalilstemmler.com/blogs/typescript/node-starter-project/
+
+```bash
+npm i -D typescript ts-node
+```
+
+Package.json needs:
+
+```
+"build": "tsc"
+"start": "ts-node ./src/index.ts"
+```
+
+
+
+Create the `tsconfig.json` file:
+
+```bash
+npx tsc --init \
+    --rootDir src \
+    --outDir build \
+    --esModuleInterop \
+    --resolveJsonModule \
+    --lib es2021 \
+    --module commonjs \
+    --allowJs true \
+    --noImplicitAny true
+```
+
+Details of this configuration:
+
+ - `rootDir`: source at `src`
+ - `outDir`: built code at `build`
+ - `esModuleInterop`: Enable common.js modules
+ - `resolveJsonModule`: allow us to import `json` files
+ - `lib`: Adds ambient types to our project, allowing us to rely on features from different Ecmascript versions, testing libraries, use es6 language features but compile down to ES5.
+ - `module`: commonjs is the standard Node module system in 2019
+ - `allowJs`: allow us to include plain JS
+ - `noImplicitAny`: enforce explicit types
+
+To use TypeScript for ESLint:
 
 ```bash
 # Install typescript parser/plugin
 npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin
 
 # Add 'extends', 'plugin', set 'parser'.
-yq e '.extends += [ "plugin:@typescript-eslint/recommended" ]' .eslintrc.yaml
-yq e '.plugins += [ "@typescript-eslint" ]' .eslintrc.yaml
-yq e '.parser = "@typescript-eslint/parser" .eslintrc.yaml
+cp .eslintrc.yml .eslintrc.yml.backup
+yq -i e '.extends += [ "plugin:@typescript-eslint/recommended" ]' .eslintrc.yml
+yq -i e '.plugins += [ "@typescript-eslint" ]' .eslintrc.yml
+yq -i e '.parser = "@typescript-eslint/parser"' .eslintrc.yml
+```
+
+To add support for TypeScript to Jest:
+
+```bash
+npm i -D jest typescript ts-jest @types/jest
+npx ts-jest config:init
 ```
 
 To add to Husky/lint-staged:
