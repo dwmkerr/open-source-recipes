@@ -177,6 +177,14 @@ test('adds 1 + 2 to equal 3', () => {
 EOF
 ```
 
+Setup Jest coverage:
+
+```bash
+cp package.json package.json.backup
+jq '.scripts["test:cove"]="jest --coverage --coverageDirectory=artifacts/coverage"' package.json.backup > package.json
+```
+
+
 Add test commands:
 
 ## TypeScript
