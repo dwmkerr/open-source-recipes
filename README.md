@@ -17,6 +17,8 @@
     - [License](#license)
 - [Linting](#linting)
     - [ESLint and Prettier](#eslint-and-prettier)
+- [Testing](#testing)
+    - [Jest](#jest)
 - [TypeScript](#typescript)
 - [Commit Linting](#commit-linting)
     - [Setup Instructions](#setup-instructions)
@@ -152,6 +154,30 @@ npx install-peerdeps --dev eslint-config-airbnb
 # Add 'extends', 'plugin', set 'parser'.
 yq e '.extends += [ "airbnb" ]' .eslintrc.yml
 ```
+
+## Testing
+
+### Jest
+
+Install and setup [Jest](https://jestjs.io):
+
+```bash
+# Install Jest.
+npm install --save-dev jest
+
+# Configure test and test:debug commands.
+cp package.json package.json.backup
+jq '.scripts.test="jest" | .scripts["test:debug"]="node --inspect-brk node_modules/.bin/jest --runInBand"' package.json.backup > package.json
+
+# Create a basic test.
+cat << EOF > ./index.test.js
+test('adds 1 + 2 to equal 3', () => {
+  expect(1 + 2).toBe(3);
+});
+EOF
+```
+
+Add test commands:
 
 ## TypeScript
 
