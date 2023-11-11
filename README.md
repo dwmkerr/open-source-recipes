@@ -6,6 +6,7 @@
 - [Allow people to test pipelines locally](#allow-people-to-test-pipelines-locally)
     - [🚀 Build Pipelines](#-build-pipelines)
 - [Release Please](#release-please)
+- [Releasing](#releasing)
 - [Versioning](#versioning)
 - [Include versioning information](#include-versioning-information)
     - [Versioning](#versioning-1)
@@ -73,7 +74,8 @@ act -j main -s GITHUB_TOKEN=<token>
 
 ## Release Please
 
-## Versioning
+
+Under Settings > Actions > Workflow Permissions, enable the option "Allow GitHub Actions to create and approve pull requests".
 
 The version of the site and the code is defined in the [`package.json`](./package.json) file.
 
@@ -84,6 +86,18 @@ If you need to manually trigger a release, run:
 ```bash
 git commit --allow-empty -m "chore: release 2.0.0" -m "Release-As: 2.0.0"
 ```
+
+Add release please documentation to your README with the snippet below:
+
+## Releasing
+
+This project uses [Release Please](https://github.com/googleapis/release-please) to manage releases. As long as you use [Conventional Commit messages](https://www.conventionalcommits.org/en/v1.0.0/), release please will open up a 'release' pull request on the `main` branch when changes are merged. Merging the release pull request will trigger a full release to NPM.
+
+```bash
+VERSION="0.1.0" git commit --allow-empty -m "chore: release ${VERSION}" -m "Release-As: ${VERSION}"
+```
+
+## Versioning
 
 
 ## Include versioning information
@@ -137,12 +151,11 @@ EOF
 cp package.json package.json.backup
 jq '.scripts.lint="eslint ." | .scripts["lint:fix"]="eslint --fix ."' package.json.backup > package.json
 
-# Documents
-
-echo "| Command | Description |" >>> README.md
-echo "| ------- | ----------- |" >>> README.md
-echo "| npm run lint | Lint the code with eslint/prettier |" >>> README.md
-echo "| npm run lint:fix | Fix the code with eslint/prettier |" >>> README.md
+# Add some basic documentation.
+echo "| Command | Description |" >> README.md
+echo "| ------- | ----------- |" >> README.md
+echo "| npm run lint | Lint the code with eslint/prettier |" >> README.md
+echo "| npm run lint:fix | Fix the code with eslint/prettier |" >> README.md
 
 ```
 
