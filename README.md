@@ -24,6 +24,7 @@
 - [Commit Linting](#commit-linting)
     - [Setup Instructions](#setup-instructions)
     - [Readme](#readme)
+- [Add Funding](#add-funding)
 
 <!-- vim-markdown-toc -->
 
@@ -286,3 +287,13 @@ echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitl
 
 Commit messages are linted with [commitlint](https://github.com/conventional-changelog/commitlint) and should match the [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/).
 
+## Add Funding
+
+```bash
+mkdir -p .github/
+
+cat << EOF > ./.github/FUNDING.yml
+# Support 'GitHub Sponsors' funding.
+github: dwmkerr
+EOF
+```
