@@ -189,13 +189,17 @@ test('adds 1 + 2 to equal 3', () => {
   expect(1 + 2).toBe(3);
 });
 EOF
-```
 
-Setup Jest coverage:
-
-```bash
+# Setup Jest coverage.
 cp package.json package.json.backup
-jq '.scripts["test:cove"]="jest --coverage --coverageDirectory=artifacts/coverage"' package.json.backup > package.json
+jq '.scripts["test:cov"]="jest --coverage --coverageDirectory=artifacts/coverage"' package.json.backup > package.json
+
+# Add some basic documentation.
+echo "| Command | Description |" >> README.md
+echo "| ------- | ----------- |" >> README.md
+echo "| npm run test | Run tests. |" >> README.md
+echo "| npm run test:debug | Debug tests. |" >> README.md
+echo "| npm run test:cov | Run tests with coverage reported. |" >> README.md
 ```
 
 
