@@ -184,7 +184,7 @@ cp package.json package.json.backup
 jq '.scripts.test="jest" | .scripts["test:debug"]="node --inspect-brk node_modules/.bin/jest --runInBand"' package.json.backup > package.json
 
 # Create a basic test.
-cat << EOF > ./index.test.js
+cat << EOF >> ./index.test.js
 test('adds 1 + 2 to equal 3', () => {
   expect(1 + 2).toBe(3);
 });
