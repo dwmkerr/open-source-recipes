@@ -155,8 +155,8 @@ jq '.scripts.lint="eslint ." | .scripts["lint:fix"]="eslint --fix ."' package.js
 # Add some basic documentation.
 echo "| Command | Description |" >> README.md
 echo "| ------- | ----------- |" >> README.md
-echo "| npm run lint | Lint the code with eslint/prettier |" >> README.md
-echo "| npm run lint:fix | Fix the code with eslint/prettier |" >> README.md
+echo "| `npm run lint` | Lint the code with eslint/prettier |" >> README.md
+echo "| `npm run lint:fix` | Fix the code with eslint/prettier |" >> README.md
 
 ```
 
@@ -259,6 +259,8 @@ yq -i e '.extends += [ "plugin:@typescript-eslint/recommended" ]' .eslintrc.yml
 yq -i e '.plugins += [ "@typescript-eslint" ]' .eslintrc.yml
 yq -i e '.parser = "@typescript-eslint/parser"' .eslintrc.yml
 ```
+
+Note that **eslint** plugins and extensions should come **before** prettier.
 
 To add support for TypeScript to Jest:
 
